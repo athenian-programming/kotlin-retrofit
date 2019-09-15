@@ -12,16 +12,16 @@ import kotlin.time.measureTimedValue
 
 @ExperimentalTime
 fun main() {
-    fun withService(service: DelayedService, executor: ExecutorService) =
+    fun withService(id: Int, service: DelayedService, executor: ExecutorService) =
         executor.submit {
-            log("Launching request with executor")
+            log("Launching request $id with executor")
             service.withoutSuspend().execute().body()
         }
 
     val (_, d) =
         measureTimedValue {
             val executor = Executors.newFixedThreadPool(threadCount)
-        val reqs = List(requestCount) { withService(service, executor) }
+            val reqs = List(requestCount) { withService(it, service, executor) }
         reqs.forEach { it.get() }
     }
 

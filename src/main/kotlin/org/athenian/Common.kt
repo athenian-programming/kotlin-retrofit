@@ -21,10 +21,12 @@ object Common {
 
     val retrofit by lazy {
         Retrofit.Builder()
-            .baseUrl("http://localhost:8080/")
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+            .run {
+                baseUrl("http://localhost:8080/")
+                client(okHttpClient)
+                addConverterFactory(GsonConverterFactory.create())
+                build()
+            }
     }
 
     val service by lazy { retrofit.create(DelayedService::class.java) }

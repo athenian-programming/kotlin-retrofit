@@ -9,15 +9,15 @@ import kotlin.time.measureTimedValue
 
 @ExperimentalTime
 fun main() {
-    fun withThread(service: DelayedService) =
+    fun withThread(id: Int, service: DelayedService) =
         thread {
-            log("Launching request with thread")
+            log("Launching request $id with thread")
             service.withoutSuspend().execute().body()
         }
 
     val (_, d) =
         measureTimedValue {
-            val requests = List(requestCount) { withThread(service) }
+            val requests = List(requestCount) { withThread(it, service) }
             requests.forEach { it.join() }
         }
     println("Total time with thread: $d Pool size: ${okHttpClient.connectionPool().connectionCount()}\n")

@@ -12,9 +12,9 @@ import kotlin.time.measureTimedValue
 
 @ExperimentalTime
 fun main() {
-    fun CoroutineScope.withoutSuspend(service: DelayedService, dispatcher: ExecutorCoroutineDispatcher) {
+    fun CoroutineScope.withoutSuspend(id: Int, service: DelayedService, dispatcher: ExecutorCoroutineDispatcher) {
         launch(dispatcher) {
-            log("Launching request without suspend")
+            log("Launching request $id without suspend")
             service.withoutSuspend().execute().body()
         }
     }
@@ -27,7 +27,7 @@ fun main() {
                 measureTimedValue {
                     runBlocking {
                         repeat(requestCount) {
-                            withoutSuspend(service, poolDispatcher)
+                            withoutSuspend(it, service, poolDispatcher)
                         }
                     }
                 }
