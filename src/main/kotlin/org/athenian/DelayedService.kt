@@ -5,7 +5,7 @@ import retrofit2.http.GET
 
 interface DelayedService {
     @GET("delayed")
-    fun withoutSuspend(): Call<Map<String, String>>
+    fun withBlock(): Call<Map<String, String>>
 
     @GET("delayed")
     suspend fun withSuspend(): Map<String, String>

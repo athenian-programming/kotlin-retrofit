@@ -31,8 +31,8 @@ fun main() {
                     call.apply {
                         response.header("cache-control", "must-revalidate,no-cache,no-store")
                         response.status(HttpStatusCode.OK)
-                        log("Waiting 1 second")
-                        delay(1.seconds.toLongMilliseconds())
+                        log("Waiting 2 seconds")
+                        delay(2.seconds.toLongMilliseconds())
                         respondText(
                             Json.stringify(
                                 mapOf(

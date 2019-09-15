@@ -6,20 +6,18 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-object Common {
-    val connectionPoolSize = 20
+object Config {
     val threadCount = 20
     val requestCount = 12
 
-    val okHttpClient by lazy {
+    val okHttpClient =
         OkHttpClient.Builder()
             .run {
-                connectionPool(ConnectionPool(connectionPoolSize, 10, TimeUnit.MINUTES))
+                connectionPool(ConnectionPool(20, 10, TimeUnit.MINUTES))
                 build()
             }
-    }
 
-    val retrofit by lazy {
+    val retrofit =
         Retrofit.Builder()
             .run {
                 baseUrl("http://localhost:8080/")
@@ -27,8 +25,5 @@ object Common {
                 addConverterFactory(GsonConverterFactory.create())
                 build()
             }
-    }
-
-    val service by lazy { retrofit.create(DelayedService::class.java) }
 }
 
