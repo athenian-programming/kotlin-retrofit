@@ -1,23 +1,26 @@
 package org.athenian
 
 import kotlinx.coroutines.*
+import org.athenian.Common.okHttpClient
+import org.athenian.Common.requestCount
+import org.athenian.Common.service
+import org.athenian.Common.threadCount
 import java.util.concurrent.Executors
 import kotlin.system.exitProcess
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
-
 @ExperimentalTime
 fun main() {
-    fun CoroutineScope.withSuspend(service: TestService, dispatcher: ExecutorCoroutineDispatcher) {
+    fun CoroutineScope.withSuspend(service: DelayedService, dispatcher: ExecutorCoroutineDispatcher) {
         launch(dispatcher) {
             log("Launching request with suspend")
-            val (_, dur) =
+            val (_, d) =
                 measureTimedValue {
                     service.withSuspend()
                     //delay(1.seconds.toLongMilliseconds())
                 }
-            println("Suspending call time: $dur")
+            println("Suspending call time: $d")
         }
     }
 
