@@ -1,6 +1,11 @@
 package org.athenian
 
 import io.ktor.application.call
+import io.ktor.application.install
+import io.ktor.features.Compression
+import io.ktor.features.deflate
+import io.ktor.features.gzip
+import io.ktor.features.minimumSize
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.response.header
@@ -17,6 +22,16 @@ import kotlin.time.seconds
 fun main() {
   val httpServer =
     embeddedServer(CIO, port = 8080) {
+      install(Compression) {
+        gzip {
+          priority = 1.0
+        }
+        deflate {
+          priority = 10.0
+          minimumSize(1024)
+        }
+      }
+
       routing {
         get("/") {
           call.respondText("index.html requested", ContentType.Text.Plain)

@@ -7,8 +7,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object Config {
-  val threadCount = 20
-  val requestCount = 12
+  const val threadCount = 20
+  const val requestCount = 12
 
   val okHttpClient =
     OkHttpClient.Builder()
