@@ -49,8 +49,29 @@ sourceSets {
 }
 
 compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs += ['-Xuse-experimental=kotlin.time.ExperimentalTime',
+                             '-Xuse-experimental=kotlinx.serialization.UnstableDefault',
+                             '-Xuse-experimental=kotlin.ExperimentalUnsignedTypes',
+                             '-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi',
+                             '-Xuse-experimental=kotlinx.coroutines.InternalCoroutinesApi',
+                             '-Xuse-experimental=io.ktor.util.KtorExperimentalAPI',
+                             '-Xuse-experimental=kotlinx.serialization.ImplicitReflectionSerializer',
+                             '-Xuse-experimental=kotlinx.serialization.UnstableDefault']
+    }
 }
+
 compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs += ['-Xuse-experimental=kotlin.time.ExperimentalTime',
+                             '-Xuse-experimental=kotlinx.serialization.UnstableDefault',
+                             '-Xuse-experimental=kotlin.ExperimentalUnsignedTypes',
+                             '-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi',
+                             '-Xuse-experimental=kotlinx.coroutines.InternalCoroutinesApi',
+                             '-Xuse-experimental=io.ktor.util.KtorExperimentalAPI',
+                             '-Xuse-experimental=kotlinx.serialization.ImplicitReflectionSerializer',
+                             '-Xuse-experimental=kotlinx.serialization.UnstableDefault']
+    }
 }

@@ -9,34 +9,32 @@ import org.athenian.Config.requestCount
 import org.athenian.Config.threadCount
 import java.util.concurrent.Executors
 import kotlin.system.exitProcess
-import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
-@ExperimentalTime
 fun main() {
-    Executors.newFixedThreadPool(threadCount).asCoroutineDispatcher()
-        .use { dispatcher ->
-            val service = Config.retrofit.create(DelayedService::class.java)
-            val (_, dur) =
-                measureTimedValue {
-                    runBlocking {
-                        (1..requestCount)
-                            .map { id ->
-                                launch(dispatcher) {
-                                    log("Launching suspending request $id")
-                                    val (_, d) =
-                                        measureTimedValue {
-                                            service.withSuspend()
-                                            //delay(1.seconds.toLongMilliseconds())
-                                        }
-                                    log("Suspending request $id time: $d")
-                                }
-                            }
-                            .joinAll()
+  Executors.newFixedThreadPool(threadCount).asCoroutineDispatcher()
+    .use { dispatcher ->
+      val service = Config.retrofit.create(DelayedService::class.java)
+      val (_, dur) =
+        measureTimedValue {
+          runBlocking {
+            (1..requestCount)
+              .map { id ->
+                launch(dispatcher) {
+                  log("Launching suspending request $id")
+                  val (_, d) =
+                    measureTimedValue {
+                      service.withSuspend()
+                      //delay(1.seconds.toLongMilliseconds())
                     }
+                  log("Suspending request $id time: $d")
                 }
-            println("Total time with suspending: $dur Pool size: ${okHttpClient.connectionPool().connectionCount()}")
+              }
+              .joinAll()
+          }
         }
+      println("Total time with suspending: $dur Pool size: ${okHttpClient.connectionPool().connectionCount()}")
+    }
 
-    exitProcess(0)
+  exitProcess(0)
 }

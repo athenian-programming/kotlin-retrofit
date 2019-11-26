@@ -10,10 +10,8 @@ import org.athenian.Config.okHttpClient
 import org.athenian.Config.requestCount
 import org.athenian.Config.threadCount
 import java.util.concurrent.Executors
-import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
-@ExperimentalTime
 fun main() {
     Executors.newFixedThreadPool(threadCount).asCoroutineDispatcher()
         .use { dispatcher ->
