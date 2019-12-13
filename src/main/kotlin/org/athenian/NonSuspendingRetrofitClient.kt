@@ -8,26 +8,24 @@ import org.athenian.Config.okHttpClient
 import org.athenian.Config.requestCount
 import org.athenian.Config.threadCount
 import java.util.concurrent.Executors
-import kotlin.time.measureTimedValue
-
+import kotlin.time.measureTime
 
 fun main() {
   Executors.newFixedThreadPool(threadCount).asCoroutineDispatcher()
     .use { dispatcher ->
       val service = Config.retrofit.create(DelayedService::class.java)
-      val (_, dur) =
-        measureTimedValue {
-          runBlocking {
-            (1..requestCount)
-              .map { id ->
-                launch(dispatcher) {
-                  log("Launching blocking request $id")
-                  service.withBlock().execute().body()
-                }
+      val dur = measureTime {
+        runBlocking {
+          (1..requestCount)
+            .map { id ->
+              launch(dispatcher) {
+                log("Launching blocking request $id")
+                service.withBlock().execute().body()
               }
-              .joinAll()
-          }
+            }
+            .joinAll()
         }
+      }
       println("Total time: $dur Pool size: ${okHttpClient.connectionPool().connectionCount()}\n")
     }
 }

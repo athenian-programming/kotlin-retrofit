@@ -10,29 +10,25 @@ import org.athenian.Config.okHttpClient
 import org.athenian.Config.requestCount
 import org.athenian.Config.threadCount
 import java.util.concurrent.Executors
-import kotlin.time.measureTimedValue
+import kotlin.time.measureTime
 
 fun main() {
-    Executors.newFixedThreadPool(threadCount).asCoroutineDispatcher()
-        .use { dispatcher ->
-            val client = HttpClient()
-            val (_, dur) =
-                measureTimedValue {
-                    runBlocking {
-                        (1..requestCount)
-                            .map { id ->
-                                launch(dispatcher) {
-                                    log("Launching suspending ktor request $id")
-                                    val (_, d) =
-                                        measureTimedValue {
-                                            client.call("http://localhost:8080/delayed")
-                                        }
-                                    log("Suspending request $id time: $d")
-                                }
-                            }
-                            .joinAll()
-                    }
-                }
-            println("Total time: $dur Pool size: ${okHttpClient.connectionPool().connectionCount()}")
+  Executors.newFixedThreadPool(threadCount).asCoroutineDispatcher()
+    .use { dispatcher ->
+      val client = HttpClient()
+      val dur = measureTime {
+        runBlocking {
+          (1..requestCount)
+            .map { id ->
+              launch(dispatcher) {
+                log("Launching suspending ktor request $id")
+                val dur = measureTime { client.call("http://localhost:8080/delayed") }
+                log("Suspending request $id time: $dur")
+              }
+            }
+            .joinAll()
         }
+      }
+      println("Total time: $dur Pool size: ${okHttpClient.connectionPool().connectionCount()}")
+    }
 }

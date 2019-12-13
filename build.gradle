@@ -1,26 +1,26 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.3.60'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.61'
     id "com.github.ben-manes.versions" version "0.27.0"
 }
 
 group 'org.athenian'
 version '1.0-SNAPSHOT'
 
-def retrofitVersion = '2.6.2'
-def serializationVersion = '0.13.0'
 def coroutinesVersion = '1.3.1'
 def ktorVersion = '1.2.6'
+def logbackVersion = '1.2.3'
+def retrofitVersion = '2.7.0'
+def serializationVersion = '0.13.0'
+def slf4jVersion = '1.7.28'
 
 repositories {
     maven { url "https://kotlin.bintray.com/kotlinx" }
-    mavenCentral()
-    mavenLocal()
+    maven { url = 'https://maven-central.storage-download.googleapis.com/repos/central/data/' }
+    jcenter()
 }
 
 dependencies {
-    implementation platform('org.jetbrains.kotlin:kotlin-bom')
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
     implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
@@ -38,15 +38,9 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:${coroutinesVersion}"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:${coroutinesVersion}"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-debug:${coroutinesVersion}"
-}
 
-sourceSets {
-    main {
-        java {
-            srcDirs 'src/main/java'
-            srcDirs 'src/main/kotlin'
-        }
-    }
+    implementation "ch.qos.logback:logback-classic:${logbackVersion}"
+    implementation "org.slf4j:jul-to-slf4j:${slf4jVersion}"
 }
 
 compileKotlin {
