@@ -16,19 +16,19 @@ fun main() {
   Executors.newFixedThreadPool(threadCount).asCoroutineDispatcher()
     .use { dispatcher ->
       val client = HttpClient()
-      val dur = measureTime {
+      val dur1 = measureTime {
         runBlocking {
           (1..requestCount)
             .map { id ->
               launch(dispatcher) {
                 log("Launching suspending ktor request $id")
-                val dur = measureTime { client.call("http://localhost:8080/delayed") }
-                log("Suspending request $id time: $dur")
+                val dur2 = measureTime { client.call("http://localhost:8080/delayed") }
+                log("Suspending request $id time: $dur2")
               }
             }
             .joinAll()
         }
       }
-      println("Total time: $dur Pool size: ${okHttpClient.connectionPool().connectionCount()}")
+      println("Total time: $dur1 Pool size: ${okHttpClient.connectionPool().connectionCount()}")
     }
 }

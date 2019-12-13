@@ -14,18 +14,19 @@ fun main() {
   Executors.newFixedThreadPool(threadCount).asCoroutineDispatcher()
     .use { dispatcher ->
       val service = Config.retrofit.create(DelayedService::class.java)
-      val dur = measureTime {
+      val dur1 = measureTime {
         runBlocking {
           (1..requestCount)
             .map { id ->
               launch(dispatcher) {
                 log("Launching blocking request $id")
-                service.withBlock().execute().body()
+                val dur2 = measureTime { service.withBlock().execute().body() }
+                log("Blocking request $id time: $dur2")
               }
             }
             .joinAll()
         }
       }
-      println("Total time: $dur Pool size: ${okHttpClient.connectionPool().connectionCount()}\n")
+      println("Total time: $dur1 Pool size: ${okHttpClient.connectionPool().connectionCount()}\n")
     }
 }

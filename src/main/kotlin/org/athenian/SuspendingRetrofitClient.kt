@@ -21,10 +21,7 @@ fun main() {
             .map { id ->
               launch(dispatcher) {
                 log("Launching suspending request $id")
-                val dur2 = measureTime {
-                  service.withSuspend()
-                  //delay(1.seconds.toLongMilliseconds())
-                }
+                val dur2 = measureTime { service.withSuspend() }
                 log("Suspending request $id time: $dur2")
               }
             }
